@@ -34,11 +34,6 @@ cursor.execute("""
     )
     """)
 
-cursor.execute("SELECT * FROM stock_prices")
-rows = cursor.fetchall()
-for row in rows:
-    print(row)
-
 #Reshaping the DataFrame from Wide to Long Format
 wide_data = combined.reset_index()
 print(wide_data.columns)
@@ -81,3 +76,34 @@ cursor.execute(
     "GROUP BY ticker")
 fetched_avgs = cursor.fetchall()
 print(fetched_avgs)
+
+#Now Combining Airliine Ticker and Close Price with Company Name&headquarters using JOIN
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS companies (
+        ticker TEXT PRIMARY KEY,
+        company_name TEXT,
+        headquarters TEXT,
+        hub_airport TEXT
+    )
+""")
+company_data = [
+    ("ALK", "Alaska Air Group", "Seattle, WA", "SEA"),
+    ("DAL", "Delta Air Lines", "Atlanta, GA", "ATL"),
+    ("UAL", "United Airlines", "Chicago, IL", "ORD"),
+    ("LUV", "Southwest Airlines", "Dallas, TX", "DAL"),
+]
+
+cursor.executemany(
+    "INSERT OR REPLACE INTO companies VALUES (?, ?, ?, ?)",
+    company_data
+)
+connection.commit()
+cursor.execute(
+    "Select companies.ticker, companies.company_name, AVG(stock_prices.close_price) " \
+    "From stock_prices " \
+    "JOIN companies ON stock_prices.ticker = companies.ticker " \
+    "GROUP BY companies.ticker "
+)
+fetched_joined_avgs = cursor.fetchall()
+print(fetched_joined_avgs)
+
