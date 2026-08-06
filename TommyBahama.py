@@ -1,3 +1,9 @@
+#Looked at Oxford Industries (OXM) stock price history and speculated that revenue is seasonal.
+#Curious as to the dip in July, are people not going on vacation in July? Do people take PTO earlier in summer?
+#Looked at Tommy Bahama's food and beverage segment revenues (limited public data)
+#Speculate that that there was a growthperiod between 2022-2024 from yearly vs quarterly revenue (yearly revnue from 2022-2025 grew 11%)
+#Has there been an overall decline in revenue since 2024? Why did Q1 revenue drop 2.85% from 2024 to 2025?
+
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
